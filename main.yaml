@@ -1,0 +1,33 @@
+name: Deploy Web Application
+
+on:
+push:
+branches:
+  - main
+
+jobs:
+  deploy-scraping-site:
+  name: Deploy Scraping Site
+  runs-on: ubuntu-latest
+
+  steps:
+    - name: Checkout Code
+  uses: actions/checkout@v2
+
+  - name: Set Up Node.js
+    uses: actions/setup-node@v2
+
+    - name: Install Dependencies
+    uses: npm install
+
+    - name: Build Project
+    uses: npm run build
+    
+ - name: FTP Deploy
+        uses: SamKirkland/FTP-Deploy-Action@4.3.1
+        with:
+          server: ftp://your-ftp-server.com
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./build # Specify the directory to deploy, adjust as needed
+          server-dir: /path/on/ftp/server 
